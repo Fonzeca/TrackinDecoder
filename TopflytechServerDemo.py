@@ -306,6 +306,8 @@ def printSendMessage(reply):
 def sendDataToTrackin(message):
     json_str = json.dumps(message.__dict__, default=myconverter)
 
+    print(json_str)
+
     headers = {'Content-type': 'application/json'}
     response = requests.post("http://trackin:4762/data", data=json_str, headers=headers)
 

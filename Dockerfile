@@ -4,6 +4,11 @@ RUN pip install --upgrade pip
 COPY . .
 RUN pip install pycryptodome
 RUN pip install requests
+
+RUN apk update && apk add --no-cache tzdata
+ENV TZ=America/Argentina/Buenos_Aires
+ENV DEBIAN_FRONTEND=noninteractive
+
 CMD ["python","-u", "./TopflytechServerDemo.py"] 
 # Or enter the name of your unique directory and parameter set.
 
