@@ -103,12 +103,14 @@ def dealNoObdDeviceMessage(message,socketClient):
     if reply is not None:
         printSendMessage(reply)
 
-def printReciveMessage(message):
-    if isinstance(message, Message):
-        print("Recive:", end=" ")
-        for x in message.orignBytes:
-            print('{:02X}'.format(x), end=" ")
-        print("")
+def printReciveMessage(data):
+    buf = bytearray(data)
+    print("Recive: \n")
+    for i, x in enumerate(buf):
+        print('{:02X}'.format(x), end=" ")
+        if i % 10 == 0:
+            print("\n")
+    print("")
 
 def printSendMessage(reply):
     if not (reply is None):
@@ -142,12 +144,14 @@ def on_new_client(clientsocket, addr):
         if not data:
             print("End of file from client. Resetting")
             break
-
+        
+        printReciveMessage(data)
         messageList = decoder.decode(data)
 
         for message in messageList:
             dealNoObdDeviceMessage(message,c)
 
+        print("\n----------------------------------------------\n")
     clientsocket.close()
 
 if __name__ == "__main__":
