@@ -124,7 +124,7 @@ def printSendMessage(reply):
 def sendDataToTrackin(message):
     if isinstance(message, LocationMessage):
         #Si el tiempo que viene del GPS es mayor al tiempo de ahora, no lo manda a trackin
-        if message.date > datetime.now() + timedelta(days=5):
+        if message.date > datetime.datetime.now() + timedelta(days=5):
             return
     
     json_str = json.dumps(message.__dict__, default=myconverter)
