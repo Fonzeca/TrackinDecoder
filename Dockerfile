@@ -4,6 +4,7 @@ RUN pip install --upgrade pip
 COPY . .
 RUN pip install pycryptodome
 RUN pip install requests
+RUN pip install pika
 
 RUN apk update && apk add --no-cache tzdata
 ENV TZ=America/Argentina/Buenos_Aires

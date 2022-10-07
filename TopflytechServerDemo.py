@@ -1,19 +1,14 @@
 #version 1.0.0
 #Copyright ? 2012-2019 TOPFLYTECH Co., Limitd . All rights reserved.
-import datetime
 import errno
-import http.client
-import json
 import socket
-import threading
-import time
 from ctypes import cast
 from datetime import datetime
 from threading import Thread
 from xmlrpc.client import DateTime
 
-import requests
-
+from DataSender import *
+from RabbitClient import *
 from TopflytechCodec import *
 
 
@@ -39,9 +34,6 @@ t880xPlusEncoder = T880xPlusEncoder(MessageEncryptType.NONE,"")
 # t880xdEncoder = T880xdEncoder(MessageEncryptType.NONE,"")
 # personalEncoder = PersonalAssetMsgEncoder(MessageEncryptType.NONE,"")
 
-def myconverter(o):
-    if isinstance(o, datetime.datetime):
-        return o.isoformat()
 
 def dealNoObdDeviceMessage(message,socketClient):
     """
@@ -121,23 +113,6 @@ def printSendMessage(reply):
             print('{:02X}'.format(x), end=" ")
         print("")
 
-def sendDataToTrackin(message):
-    if isinstance(message, LocationMessage):
-        #Si el tiempo que viene del GPS es mayor al tiempo de ahora, no lo manda a trackin
-        if message.date > datetime.datetime.now(message.date.tzinfo) + timedelta(days=5):
-            return
-    
-    json_str = json.dumps(message.__dict__, default=myconverter)
-
-    print(json_str)
-
-    headers = {'Content-type': 'application/json'}
-    response = requests.post("http://trackin:4762/data", data=json_str, headers=headers)
-
-    print(str(message.imei) + " Respuesta Trackin: " + str(response.status_code))
-
-
-
 def on_new_client(clientsocket, addr):
     print("\nConnection received from %s" % str(addr))
     while True:
@@ -179,4 +154,3 @@ if __name__ == "__main__":
         # decoder = ObdDecoder(MessageEncryptType.NONE,"")
         # decoder = PersonalAssetMsgDecoder(MessageEncryptType.NONE,"")
         Thread(target=on_new_client, args=(c, addr)).start()
-
