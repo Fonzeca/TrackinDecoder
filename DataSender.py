@@ -21,8 +21,7 @@ def sendDataToTrackin(message: Message)  -> None:
 
     
 
-    headers = {'Content-type': 'application/json'}
-    rabbit.canal.basic_publish("carmind", "trackin.data.log.decoded", json_str, headers)
+    rabbit.canal.basic_publish("carmind", "trackin.data.log.decoded", json_str)
     # response = requests.post("http://trackin:4762/data", data=json_str, headers=headers)
 
     # print(str(message.imei) + " Respuesta Trackin: " + str(response.status_code))
