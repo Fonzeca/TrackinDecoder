@@ -24,7 +24,7 @@ def sendDataToTrackin(message: Message)  -> None:
 
     try:
         rabbit.canal.basic_publish("carmind", "trackin.data.log.decoded", json_str)
-    except (exceptions.ConnectionClosed, exceptions.ChannelClosed) as error:
+    except (exceptions.ConnectionClosed, exceptions.ChannelClosed, exceptions.ChannelWrongStateError) as error:
         print('Try to reconnect in 5 seconds')
         time.sleep(5)
         rabbit.reconnect()
