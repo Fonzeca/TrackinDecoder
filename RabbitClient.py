@@ -22,6 +22,17 @@ from pika import channel
 config = configparser.ConfigParser()
 config.read("./config.ini")
 url =config.get("RabbitMq", "URL")
-parameters = pika.URLParameters(url=url)
-connection = pika.BlockingConnection(parameters)
-canal = connection.channel()
+parameters : pika.URLParameters = pika.URLParameters(url=url)
+connection : pika.BlockingConnection = pika.BlockingConnection(parameters)
+canal : channel.Channel = connection.channel()
+
+def reconnect():
+    global parameters
+    parameters = pika.URLParameters(url=url)
+
+    global connection
+    connection = pika.BlockingConnection(parameters)
+
+    global canal
+    canal = connection.channel()
+

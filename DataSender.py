@@ -1,4 +1,7 @@
 import json
+import time
+
+from pika import exceptions
 
 import RabbitClient as rabbit
 from TopflytechCodec import *
@@ -19,9 +22,13 @@ def sendDataToTrackin(message: Message)  -> None:
 
     print(json_str)
 
-    
-
-    rabbit.canal.basic_publish("carmind", "trackin.data.log.decoded", json_str)
+    try:
+        rabbit.canal.basic_publish("carmind", "trackin.data.log.decoded", json_str)
+    except (exceptions.ConnectionClosed, exceptions.ChannelClosed) as error:
+        print('Try to reconnect in 5 seconds')
+        time.sleep(5)
+        rabbit.reconnect()
+        sendDataToTrackin(message)
     # response = requests.post("http://trackin:4762/data", data=json_str, headers=headers)
 
     # print(str(message.imei) + " Respuesta Trackin: " + str(response.status_code))
