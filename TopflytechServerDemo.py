@@ -120,7 +120,7 @@ def on_new_client(clientsocket, addr):
             data = clientsocket.recv(2048)
         except socket.error as e:
             if e.errno != errno.ECONNRESET:
-                raise
+                break
             pass
             
         if not data:
