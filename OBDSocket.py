@@ -124,7 +124,7 @@ def on_new_client(clientsocket, addr, decoder):
         messageList = decoder.decode(data)
 
         for message in messageList:
-            dealObdDeviceMessage(message,c)
+            dealObdDeviceMessage(message,clientsocket)
 
         print("\n----------------------------------------------\n")
     clientsocket.close()
